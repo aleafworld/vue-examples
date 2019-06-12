@@ -3,76 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <style type="text/css">
-	.adbox{display:inline-block;position:relative;width:600px;height:200px;}
-	.adbox .ad_item{position:absolute;left:0;top:0;right:0;bottom:0;width:600px;height:200px;}
 
-	.adbox .btn{position:absolute;opacity:0;width:40px;height:40px;line-height:40px;border-radius:20px;background:#fff;text-align:center;cursor:pointer;}
-	.adbox .left{left:10px;top:80px;}
-	.adbox .right{right:10px;top:80px;}
-	
-	.adbox:hover .btn{opacity:0.5;}
+.adbox{display:inline-block;position:relative;width:600px;height:200px;text-align:center;}
+.adbox .ad_item{position:absolute;left:0;top:0;right:0;bottom:0;width:600px;height:200px;}
 
-	.adbox .dots{position:absolute;left:10px;right:10px;bottom:10px;text-align:center;opacity:0.5;}
-	.dots .dot{display:inline-block;width:10px;height:10px;margin:2px;border-radius:5px;background:#fff;cursor:pointer;}
-	.dots .active{background:#f93;}
+.adbox .btn{position:absolute;opacity:0;width:40px;height:40px;line-height:40px;border-radius:20px;text-align:center;cursor:pointer;}
+.adbox .left{left:10px;top:40px;background:#999 url(img/icon_arrow_left.png) no-repeat center center;}
+.adbox .right{right:10px;top:40px;background:#999 url(img/icon_arrow_right.png) no-repeat center center;}
 
-	.ad-enter-active, .ad-leave-active{transition: all 0.8s ease;}
-	.ad-enter, .ad-leave-to {opacity: 0;}
+.adbox:hover .btn{opacity:0.5;}
+
+.adbox .dots{display:inline-block;position:absolute;left:10px;right:10px;bottom:10px;text-align:center;opacity:0.5;pointer-events:none;}
+.dots .dot{display:inline-block;width:10px;height:10px;margin:2px;border-radius:5px;background:#fff;cursor:pointer;pointer-events:auto;}
+.dots .active{background:#f93;}
+
+.ad-enter-active, .ad-leave-active{transition: all 0.8s ease;}
+.ad-enter, .ad-leave-to {opacity: 0;}
+
 </style>
 <script src="../vue.min.js"></script>
+<script src="ad-slider.js"></script>
 <script type="text/javascript">
 
-Vue.component('ad-slider', {
-	data: function(){return{
-		ad_data:[
-			{img:"img/ad-0.jpg",url:""},
-			{img:"img/ad-1.jpg",url:""},
-			{img:"img/ad-2.jpg",url:""}
-		],
-		ad_id: 0,
-		ad_timer: null
-	}},
-	mounted: function(){
-		this.ad_timer = setTimeout(this.adSlide,3000,1);
-	},
-	methods:{
-		adSlide: function(v){
-			clearTimeout(this.ad_timer);
-			this.ad_id = (this.ad_id + this.ad_data.length + v) % this.ad_data.length;
-			this.ad_timer = setTimeout(this.adSlide,3000,1);
-		},
-		adSlideTo: function(v){
-			clearTimeout(this.ad_timer);
-			this.ad_id = v;
-			this.ad_timer=setTimeout(this.adSlide,3000,1);
-		},
-		adClick: function(url){
-			window.open(url);
-		}
-	},
-	template: '\
-		<div class="adbox">\
-			<template v-for="(ad,index) in ad_data">\
-			<transition name="ad"><img v-if="ad_id==index" v-bind:src="ad.img" v-on:click="adClick(ad.url)" class="ad_item"></transition>\
-			</template>\
-			<span class="btn left" v-on:click="adSlide(-1)">Prev</span>\
-			<span class="btn right" v-on:click="adSlide(1)">Next</span>\
-			<div class="dots">\
-			<span v-for="(ad,index) in ad_data" v-bind:key="index" v-bind:class="[\'dot\',ad_id==index ? \'active\':\'\']" v-on:click="adSlideTo(index)"></span>\
-			</div>\
-		</div>\
-	'
-});
-
 window.onload = function(){
-	new Vue({el: '#content'});
+	new Vue({
+		el: '#content',
+		data:{
+			ad_data:[
+				{img:"img/ad-0.jpg",url:""},
+				{img:"img/ad-1.jpg",url:""},
+				{img:"img/ad-2.jpg",url:""}
+			]
+		},
+		methods:{
+			adClick: function(url){
+				alert("opening : " + url);
+			}
+		}
+	});
 };
 
 </script>
 </head>
 <body>
 <div id="content">
-	<ad-slider></ad-slider>
+	<ad-slider v-bind:ad_data="ad_data" width="1030" height="120" delay="3000" v-on:ad_click="adClick"></ad-slider>
 </div>
 </body>
 </html>
