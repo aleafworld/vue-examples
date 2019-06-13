@@ -22,21 +22,21 @@ Vue.component('ad-slider', {
 		adSlideTo: function(v){
 			clearTimeout(this.ad_timer);
 			this.ad_id = v;
-			this.ad_timer=setTimeout(this.adSlide,this.delay,1);
+			this.ad_timer = setTimeout(this.adSlide,this.delay,1);
 		},
 		adClick: function(url){
 			this.$emit("ad_click",url);
 		}
 	},
 	template: '\
-		<div class="adbox" v-bind:style="\'width:\' + width + \'px;height:\'+height+\'px\'">\
+		<div class="adbox" v-bind:style="{width:width + \'px\', height:height + \'px\'}">\
 			<template v-for="(ad,index) in ad_data">\
-			<transition name="ad"><img v-if="ad_id==index" v-bind:src="ad.img" v-on:click="adClick(ad.url)" class="ad_item" v-bind:style="\'width:\'+width+\'px;height:\'+height+\'px\'"></transition>\
+			<transition name="ad"><img v-if="ad_id==index" v-bind:src="ad.img" v-on:click="adClick(ad.url)" class="ad_item" v-bind:style="{width:width+\'px\',height:height+\'px\'}"></transition>\
 			</template>\
-			<span class="btn left" v-on:click="adSlide(-1)" v-bind:style="\'top:\'+(height/2-20)+\'px\'"></span>\
-			<span class="btn right" v-on:click="adSlide(1)" v-bind:style="\'top:\'+(height/2-20)+\'px\'"></span>\
+			<span class="btn left" v-on:click="adSlide(-1)" v-bind:style="{top:(height/2-20)+\'px\'}"></span>\
+			<span class="btn right" v-on:click="adSlide(1)" v-bind:style="{top:(height/2-20)+\'px\'}"></span>\
 			<div class="dots">\
-			<span v-for="(ad,index) in ad_data" v-bind:key="index" v-bind:class="[\'dot\',ad_id==index ? \'active\':\'\']" v-on:click="adSlideTo(index)"></span>\
+			<span v-for="(ad,index) in ad_data" v-bind:key="index" class="dot" v-bind:class="{active:ad_id==index}" v-on:click="adSlideTo(index)"></span>\
 			</div>\
 		</div>\
 	'
